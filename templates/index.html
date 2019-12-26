@@ -36,7 +36,7 @@
         <a type="button" id="download-button" href="javascript:">Download (PDF)</a>
         <a href="/hdimg?date={{ date }}" download>Download (PNG)</a>
     {% endif %}
-    {% if data.next_day != None %}
+    {% if data.next_day is defined %}
         <a href="/?date={{ next_day }}">Next Image</a>
     {% endif %}
 </div>

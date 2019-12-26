@@ -1,14 +1,15 @@
 import datetime
+import os
 
 import requests
-from flask import Flask, make_response
+from flask import Flask, make_response, abort
 from flask import request, render_template
 from flask_caching import Cache
 
 app = Flask(__name__)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
-API_KEY = "DEMO_KEY"
+API_KEY = os.environ.get('API_KEY') or 'DEMO_KEY'
 
 
 @cache.memoize(60 * 60 * 24)
@@ -50,18 +51,27 @@ def apod_api():
     else:
         datetime_obj = datetime.datetime.now()
 
+    if datetime_obj > datetime.datetime.now():
+        abort(404)
+
     prev_day = datetime_obj + datetime.timedelta(days=-1)
     next_day = datetime_obj + datetime.timedelta(days=1)
     prev_day_str = datetime.datetime.strftime(prev_day, "%Y-%m-%d")
     next_day_str = datetime.datetime.strftime(next_day, "%Y-%m-%d")
 
-    if next_day > datetime.datetime.now():
-        next_day_str = None
-
     data, raw = query_nasa_apod(date)
-    print(raw)
-    return render_template('index.html', data=data, date=datetime.datetime.strftime(datetime_obj, "%Y-%m-%d"), raw=raw,
-                           next_day=next_day_str, prev_day=prev_day_str)
+
+    context = {
+        'data': data,
+        'date': datetime.datetime.strftime(datetime_obj, "%Y-%m-%d"),
+        'raw': raw,
+        'prev_day': prev_day_str
+    }
+
+    if next_day < datetime.datetime.now():
+        context['next_day'] = next_day_str
+
+    return render_template('index.html', **context)
 
 
 if __name__ == '__main__':
