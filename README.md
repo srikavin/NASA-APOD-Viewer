@@ -17,9 +17,9 @@ source venv/bin/activate
 
 Install dependencies:
 ```
-pip install -r requirments.txt
+pip install -r requirements.txt
 ```
 
 ## Usage
 
-Run `python app.py`
+Run `FLASK_RUN_PORT=2000 flask run` to start the app on port 2000.
