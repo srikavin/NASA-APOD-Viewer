@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>{{ data.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}"/>
+    {% if data.media_type == 'image' %}
+        <style>
+            #image {
+                background-image: url("/hdimg?date={{ date }}");
+            }
+        </style>
+    {% endif %}
+</head>
+
+<body>
+<div id="image-container">
+    {% if data.media_type == 'image' %}
+        <div id="image"></div>
+    {% elif data.media_type == 'video' %}
+        <iframe id="video" src="{{ data.url }}&autoplay=1&loop=1">
+        </iframe>
+    {% endif %}
+
+</div>
+<div id="padding"></div>
+<div id="content">
+    <h1>{{ data.title }}</h1>
+    <p>{{ data.explanation }}</p>
+    {% if data.copyright %}
+        <small>&copy; {{ data.copyright }}</small>
+    {% endif %}
+</div>
+<div id="navigation">
+    <a href="/?date={{ prev_day }}">Previous Image</a>
+    {% if data.media_type == 'image' %}
+        <a type="button" id="download-button" href="javascript:">Download (PDF)</a>
+        <a href="/hdimg?date={{ date }}" download>Download (PNG)</a>
+    {% endif %}
+    {% if data.next_day != None %}
+        <a href="/?date={{ next_day }}">Next Image</a>
+    {% endif %}
+</div>
+<div id="padding-end"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"
+        integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/"
+        crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='gen_pdf.js') }}"></script>
+<script>
+    date = "{{ date }}";
+    raw = {{ raw | safe }};
+</script>
+</body>
+</html>

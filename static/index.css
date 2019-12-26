@@ -1,0 +1,69 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+}
+
+#video {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    border: none;
+    background: black;
+}
+
+#image {
+    height: 100vh;
+    width: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: black;
+    background-attachment: fixed;
+}
+
+#image-container {
+    min-height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -5;
+}
+
+#padding {
+    min-height: 100vh;
+    width: 10px;
+}
+
+#padding-end {
+    width: 10px;
+}
+
+#content {
+    font-size: 1.2em;
+}
+
+#content > * {
+    padding: 5px;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    margin-left: 15vw;
+    margin-right: 15vw;
+}
+
+#navigation {
+    margin-top: 35vh;
+    margin-bottom: 25vh;
+    display: flex;
+    justify-content: center;
+}
+
+#navigation > a {
+    background: rgba(0, 0, 0, 0.1);
+    color: white;
+    padding: 5px;
+    border: 1px rgba(0, 0, 0, 0.5) solid;
+    border-radius: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
