@@ -15,6 +15,8 @@ API_KEY = os.environ.get('API_KEY') or 'DEMO_KEY'
 @cache.memoize(60 * 60 * 24)
 def query_nasa_apod(date):
     r = requests.get('https://api.nasa.gov/planetary/apod', params={'hd': 'true', 'date': date, 'api_key': API_KEY})
+    if r.status_code != 200:
+        abort(404)
     return r.json(), r.text
 
 
