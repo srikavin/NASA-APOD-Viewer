@@ -14,7 +14,12 @@ API_KEY = os.environ.get('API_KEY') or 'DEMO_KEY'
 
 @cache.memoize(60 * 60 * 24)
 def query_nasa_apod(date):
-    r = requests.get('https://api.nasa.gov/planetary/apod', params={'hd': 'true', 'date': date, 'api_key': API_KEY})
+    params = {'hd': 'true', 'api_key': API_KEY}
+
+    if date != 'today':
+        params['date'] = date
+
+    r = requests.get('https://api.nasa.gov/planetary/apod', params=params)
     if r.status_code != 200:
         abort(404)
     return r.json(), r.text
@@ -48,20 +53,17 @@ def get_hdimg():
 @app.route('/')
 def apod_api():
     date = request.args.get('date')
-    if date:
-        datetime_obj = datetime.datetime.strptime(date, "%Y-%m-%d")
-    else:
-        datetime_obj = datetime.datetime.now()
+    if not date:
+        date = "today"
 
-    if datetime_obj > datetime.datetime.now():
-        abort(404)
+    data, raw = query_nasa_apod(date)
+    date = data['date']
+    datetime_obj = datetime.datetime.strptime(date, "%Y-%m-%d")
 
     prev_day = datetime_obj + datetime.timedelta(days=-1)
     next_day = datetime_obj + datetime.timedelta(days=1)
     prev_day_str = datetime.datetime.strftime(prev_day, "%Y-%m-%d")
     next_day_str = datetime.datetime.strftime(next_day, "%Y-%m-%d")
-
-    data, raw = query_nasa_apod(date)
 
     context = {
         'data': data,
