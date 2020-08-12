@@ -1,4 +1,4 @@
-# APOD Viewer
+# NASA Astronomy Picture of the Day Viewer
 
 This is a Python3 Flask app that that displays pictures from the NASA APOD API.
 
